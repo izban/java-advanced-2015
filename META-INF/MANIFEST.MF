@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Created-By: izban
+Main-Class: ru.ifmo.ctddev.zban.implementor.Implementor
