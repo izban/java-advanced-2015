@@ -14,24 +14,24 @@ import java.util.Arrays;
  */
 public class MyMethod {
     /**
-     * method to restore
+     * Method to restore.
      */
     private final Method method;
 
     /**
-     * parameters of method
+     * Parameters of method.
      */
     private final Class[] parameters;
 
     /**
-     * name of method
+     * Name of method.
      */
     private final String name;
 
     /**
-     * Constructor from {@link java.lang.reflect.Method}
+     * Constructor from {@link java.lang.reflect.Method}.
      *
-     * @param method Method to wrap
+     * @param method Method to wrap.
      */
     public MyMethod(Method method) {
         this.method = method;
@@ -40,8 +40,9 @@ public class MyMethod {
     }
 
     /**
-     * return {@link java.lang.reflect.Method} value
-     * @return unwrapped Method
+     * Return {@link java.lang.reflect.Method} value,
+     *
+     * @return unwrapped Method,
      */
     public Method toMethod() {
         return method;
@@ -50,8 +51,8 @@ public class MyMethod {
     /**
      * Checks for equality. Return true if arguments and name of methods are equal.
      *
-     * @param o Object to compare
-     * @return true or false
+     * @param o Object to compare.
+     * @return true or false.
      */
     @Override
     public boolean equals(Object o) {
@@ -71,9 +72,9 @@ public class MyMethod {
     }
 
     /**
-     * hashCode of this object
+     * HashCode of this object.
      *
-     * @return hashCode
+     * @return hashCode.
      */
     @Override
     public int hashCode() {
@@ -91,7 +92,7 @@ public class MyMethod {
     /**
      * String representation.
      *
-     * @return String representation of MyMethod
+     * @return String representation of MyMethod.
      */
     @Override
     public String toString() {

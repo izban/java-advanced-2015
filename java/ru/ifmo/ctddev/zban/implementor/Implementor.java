@@ -17,21 +17,21 @@ import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
 /**
- * Class implements  {@link info.kgeorgiy.java.advanced.implementor.JarImpler}
+ * Class implements  {@link info.kgeorgiy.java.advanced.implementor.JarImpler}.
  * <p>
  * It generates implementation of interfaces and classes, if they can be implemented/extended.
  * Result classes are non-abstract and compiling. All abstract methods of parent return their default values.
  * The result class name will have <i>Impl</i> suffix.
  * <p>
  * If it is impossible to extend/implement input class/interface, then
- * {@link info.kgeorgiy.java.advanced.implementor.ImplerException} will be thrown
+ * {@link info.kgeorgiy.java.advanced.implementor.ImplerException} will be thrown.
  * <p>
  * @author izban
  * @see info.kgeorgiy.java.advanced.implementor.JarImpler
  */
 public class Implementor implements JarImpler {
     /**
-     * endLine symbol. May be different on different systems.
+     * Endline symbol. May be different on different systems.
      */
     private static final String endLine = System.getProperty("line.separator");
 
@@ -139,11 +139,11 @@ public class Implementor implements JarImpler {
     }
 
     /**
-     * dfs for all parents of this class to find all abstract methods
+     * Dfs for all parents of this class to find all abstract methods.
      * .
-     * @param cls current class to evaluate
-     * @param abstractMethods {@link java.util.HashSet} with abstract methods
-     * @param overridedMethods {@link java.util.HashSet} with overrided methods
+     * @param cls current class to evaluate.
+     * @param abstractMethods {@link java.util.HashSet} with abstract methods.
+     * @param overridedMethods {@link java.util.HashSet} with overrided methods.
      */
     private void dfs(Class<?> cls, HashSet<MyMethod> abstractMethods, HashSet<MyMethod> overridedMethods) {
         for (Method method : cls.getDeclaredMethods()) {
@@ -162,10 +162,10 @@ public class Implementor implements JarImpler {
     }
 
     /**
-     * returns all abstract methods of class
+     * Returns all abstract methods of class.
      *
-     * @param cls class which methods you are need
-     * @return abstract methods
+     * @param cls class which methods you are need.
+     * @return abstract methods.
      */
     Method[] getMethods(Class<?> cls) {
         HashSet<MyMethod> abstractMethods = new HashSet<>();
@@ -264,7 +264,7 @@ public class Implementor implements JarImpler {
      *
      * @param token type token to create implementation for.
      * @param jarFile target <tt>.jar</tt> file.
-     * @throws ImplerException if can't implement this
+     * @throws ImplerException if can't implement this.
      */
     @Override
     public void implementJar(Class<?> token, File jarFile) throws ImplerException {
@@ -307,12 +307,12 @@ public class Implementor implements JarImpler {
     }
 
     /**
-     * produces jar archive with implementation of class.
+     * Produces jar archive with implementation of class.
      * <p>
-     * if flag in {@code args[0]} is "-jar", then it writes to file {@code args[2]} implementation of class
-     * {@code args[1]}
+     * If flag in {@code args[0]} is "-jar", then it writes to file {@code args[2]} implementation of class
+     * {@code args[1]}.
      * .
-     * @param args flag, class to extend and .jar-file
+     * @param args flag, class to extend and .jar-file.
      */
     public static void main(String args[]) {
         if (args == null || args.length != 3 || args[0] == null || !args[0].equals("-jar") || args[1] == null || args[2] == null) {

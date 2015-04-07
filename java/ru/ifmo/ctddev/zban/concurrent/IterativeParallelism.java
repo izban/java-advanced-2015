@@ -3,14 +3,37 @@ package ru.ifmo.ctddev.zban.concurrent;
 import info.kgeorgiy.java.advanced.concurrent.ListIP;
 
 import java.util.*;
-import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Created by izban on 07.04.15.
+ * This class implements {@link info.kgeorgiy.java.advanced.concurrent.ListIP} interface.
+ * Class can find minimum, maximum in list. It also can do map, map, filter, concat, all, any functions.
+ *
+ * It uses {@link ru.ifmo.ctddev.zban.concurrent.Monoid} in code.
+ *
+ * @author izban
+ * @see ru.ifmo.ctddev.zban.concurrent.Monoid
+ * @see info.kgeorgiy.java.advanced.concurrent.ListIP
  */
 public class IterativeParallelism implements ListIP {
+
+    /**
+     * Class do a map and fold values.
+     * <p>
+     * It divides list to list.size / threads, with rather equal numbers of elements in each.
+     * Each block is folded separately in new thread.
+     * To fold class uses {@link ru.ifmo.ctddev.zban.concurrent.Monoid} conception.
+     *
+     * @param threads numbers of threads to use
+     * @param values values to fold
+     * @param function from T to U
+     * @param monoid monoid to use
+     * @param <T> input type
+     * @param <U> output type
+     * @return folded value
+     * @throws InterruptedException if thread was interrupted
+     */
     private <T, U> U fold(int threads, List<? extends T> values, Function<T, U> function, Monoid<U> monoid) throws InterruptedException {
         if (threads < 1) {
             throw new IllegalArgumentException("can't work with " + threads + " threads");
@@ -79,6 +102,14 @@ public class IterativeParallelism implements ListIP {
         return accumulator.isPresent() ? accumulator.get() : null;
     }
 
+    /**
+     * Concat string representations of values.
+     *
+     * @param threads number of threads to use
+     * @param values values to concat
+     * @return string representation of all values
+     * @throws InterruptedException if thread was interrupted
+     */
     @Override
     public String concat(int threads, List<?> values) throws InterruptedException {
         List<StringBuilder> a = fold(threads,
@@ -96,6 +127,16 @@ public class IterativeParallelism implements ListIP {
         return result.toString();
     }
 
+    /**
+     * Return list with elements which satisfy given predicate.
+     *
+     * @param threads number of threads to use
+     * @param values values to check
+     * @param predicate predicate to check
+     * @param <T> type of elements
+     * @return list with elements
+     * @throws InterruptedException if thread was interrupted
+     */
     @Override
     public <T> List<T> filter(int threads, List<? extends T> values, Predicate<? super T> predicate) throws InterruptedException {
         return fold(threads,
@@ -110,6 +151,17 @@ public class IterativeParallelism implements ListIP {
                 Monoid.<T>monoidConcatList());
     }
 
+    /**
+     * Return list with elements after applying given function.
+     *
+     * @param threads number of threads to use
+     * @param values values to map
+     * @param f mapping function
+     * @param <T> input type
+     * @param <U> output type
+     * @return mapped list
+     * @throws InterruptedException if thread was interrupted
+     */
     @Override
     public <T, U> List<U> map(int threads, List<? extends T> values, Function<? super T, ? extends U> f) throws InterruptedException {
         return fold(threads,
@@ -122,6 +174,16 @@ public class IterativeParallelism implements ListIP {
                 Monoid.<U>monoidConcatList());
     }
 
+    /**
+     * Return maximal value between given values by given comparator.
+     *
+     * @param threads number of threads to use
+     * @param values values to check
+     * @param comparator comparator to check
+     * @param <T> type of values
+     * @return maximal value
+     * @throws InterruptedException if thread was interrupted
+     */
     @Override
     public <T> T maximum(int threads, List<? extends T> values, Comparator<? super T> comparator) throws InterruptedException {
         return fold(threads,
@@ -138,11 +200,31 @@ public class IterativeParallelism implements ListIP {
                 }));
     }
 
+    /**
+     * Return minimal value between given values by given comparator.
+     *
+     * @param threads number of threads to use
+     * @param values values to check
+     * @param comparator comparator to check
+     * @param <T> type of values
+     * @return minimal value
+     * @throws InterruptedException if thread was interrupted
+     */
     @Override
     public <T> T minimum(int threads, List<? extends T> values, Comparator<? super T> comparator) throws InterruptedException {
         return maximum(threads, values, comparator.reversed());
     }
 
+    /**
+     * Check if all given elements satisfy given predicate.
+     *
+     * @param threads number of threads to use
+     * @param values elements to check
+     * @param predicate predicate to check
+     * @param <T> type of element
+     * @return true if all elements satisfy given predicate, false otherwise
+     * @throws InterruptedException if thread was interrupted
+     */
     @Override
     public <T> boolean all(int threads, List<? extends T> values, Predicate<? super T> predicate) throws InterruptedException {
         return fold(threads,
@@ -151,6 +233,16 @@ public class IterativeParallelism implements ListIP {
                 new Monoid<Boolean>((b1, b2) -> b1 && b2));
     }
 
+    /**
+     * Check if any of given elements satisfy given predicate.
+     *
+     * @param threads number of threads to use
+     * @param values elements to check
+     * @param predicate predicate to check
+     * @param <T> type of element
+     * @return true if any of elements satisfy given predicate, false otherwise
+     * @throws InterruptedException if thread was interrupted
+     */
     @Override
     public <T> boolean any(int threads, List<? extends T> values, Predicate<? super T> predicate) throws InterruptedException {
         return !all(threads, values, predicate.negate());
