@@ -8,7 +8,7 @@ import javax.imageio.IIOException;
 import javax.management.ImmutableDescriptor;
 import javax.management.remote.rmi.RMIServerImpl;
 import java.io.File;
-import java.nio.file.Files;
+import java.io.PrintWriter;
 
 /**
  * Created by izban on 06.04.15.
@@ -29,5 +29,6 @@ public class ImplementorTest {
         test(ImmutableDescriptor.class, new File("trash"));
         test(Completions.class, new File("trash"));
         test(RMIServerImpl.class, new File("trash"));
+        test(PrintWriter.class, new File("trash"));
     }
 }

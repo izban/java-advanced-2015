@@ -1,6 +1,7 @@
 package ru.ifmo.ctddev.zban.concurrent;
 
 import info.kgeorgiy.java.advanced.concurrent.ListIP;
+import info.kgeorgiy.java.advanced.mapper.ParallelMapper;
 
 import java.util.*;
 import java.util.function.Function;
@@ -17,6 +18,15 @@ import java.util.function.Predicate;
  * @see info.kgeorgiy.java.advanced.concurrent.ListIP
  */
 public class IterativeParallelism implements ListIP {
+    private ParallelMapper parallelMapper;
+
+    public IterativeParallelism(ParallelMapper parallelMapper) {
+        this.parallelMapper = parallelMapper;
+    }
+
+    public IterativeParallelism() {
+        this.parallelMapper = null;
+    }
 
     /**
      * Class do a map and fold values.
@@ -63,7 +73,7 @@ public class IterativeParallelism implements ListIP {
             void work() {
                 results[id] = ffold.apply(list);
             }
-        };
+        }
 
         int block = values.size() / threads;
         Worker workers[] = new Worker[threads];
@@ -77,22 +87,33 @@ public class IterativeParallelism implements ListIP {
             l = r;
         }
 
-        Thread threadList[] = new Thread[threads];
-        for (int i = 0; i < threads; i++) {
-            final int _id = i;
-            threadList[i] = new Thread(new Runnable() {
-                final int id = _id;
+        if (parallelMapper == null) {
+            Thread threadList[] = new Thread[threads];
+            for (int i = 0; i < threads; i++) {
+                final int _id = i;
+                threadList[i] = new Thread(new Runnable() {
+                    final int id = _id;
+
+                    @Override
+                    public void run() {
+                        workers[id].work();
+                    }
+                });
+            }
+            for (Thread thread : threadList) {
+                thread.start();
+            }
+            for (Thread thread : threadList) {
+                thread.join();
+            }
+        } else {
+            parallelMapper.map(new Function<Worker, Void>() {
                 @Override
-                public void run() {
-                    workers[id].work();
+                public Void apply(Worker worker) {
+                    worker.work();
+                    return null;
                 }
-            });
-        }
-        for (Thread thread : threadList) {
-            thread.start();
-        }
-        for (Thread thread : threadList) {
-            thread.join();
+            }, Arrays.asList(workers));
         }
 
         Optional<U> accumulator = monoid.getId();
@@ -115,7 +136,7 @@ public class IterativeParallelism implements ListIP {
         List<StringBuilder> a = fold(threads,
                 values,
                 o -> {
-                    List<StringBuilder> result = new ArrayList<StringBuilder>();
+                    List<StringBuilder> result = new ArrayList<>();
                     result.add(new StringBuilder(o.toString()));
                     return result;
                 },
