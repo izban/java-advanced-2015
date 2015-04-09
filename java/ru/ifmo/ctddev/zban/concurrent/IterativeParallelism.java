@@ -16,10 +16,16 @@ import java.util.function.Predicate;
  * @author izban
  * @see ru.ifmo.ctddev.zban.concurrent.Monoid
  * @see info.kgeorgiy.java.advanced.concurrent.ListIP
+ * @see info.kgeorgiy.java.advanced.mapper.ParallelMapper
  */
 public class IterativeParallelism implements ListIP {
     private ParallelMapper parallelMapper;
 
+    /**
+     * Constructor from ParallelMapper
+     *
+     * @param parallelMapper mapper to use.
+     */
     public IterativeParallelism(ParallelMapper parallelMapper) {
         this.parallelMapper = parallelMapper;
     }
@@ -32,7 +38,8 @@ public class IterativeParallelism implements ListIP {
      * Class do a map and fold values.
      * <p>
      * It divides list to list.size / threads, with rather equal numbers of elements in each.
-     * Each block is folded separately in new thread.
+     * Each block is folded separately in new thread. If there is ParallelMapper, no new threads will be created,
+     * all work will be done in ParallelMapper.
      * To fold class uses {@link ru.ifmo.ctddev.zban.concurrent.Monoid} conception.
      *
      * @param threads numbers of threads to use
