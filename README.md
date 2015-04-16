@@ -5,11 +5,11 @@
 
 Домашнее задание 7. Параллельный запуск
 ----
-* Протестировать сложную версию задания: 
+* Протестировать простую версию задания: 
 
         info.kgeorgiy.java.advanced.mapper.Tester taskScalar <ParallelMapperImpl>,<IterativeParallelism>
 
-* Протестировать простую версию задания: 
+* Протестировать сложную версию задания: 
     
         info.kgeorgiy.java.advanced.mapper.Tester taskList <ParallelMapperImpl>,<IterativeParallelism>
 
