@@ -15,12 +15,12 @@ import java.io.IOException;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CrawlerHardTest extends CrawlerEasyTest {
     @Test
-    public void test09_singleConnectionPerHost() throws IOException {
+    public void test10_singleConnectionPerHost() throws IOException {
         test("http://www.ifmo.ru", 2, Integer.MAX_VALUE, Integer.MAX_VALUE, 1, 10, 10);
     }
 
     @Test
-    public void test09_limitedConnectionsPerHost() throws IOException {
+    public void test11_limitedConnectionsPerHost() throws IOException {
         test("http://www.ifmo.ru", 2, Integer.MAX_VALUE, Integer.MAX_VALUE, 10, 10, 10);
     }
 }
