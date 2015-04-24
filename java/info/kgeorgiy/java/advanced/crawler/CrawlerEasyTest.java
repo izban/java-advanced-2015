@@ -1,5 +1,6 @@
 package info.kgeorgiy.java.advanced.crawler;
 
+import info.kgeorgiy.java.advanced.base.BaseTest;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -7,26 +8,19 @@ import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.junit.runners.MethodSorters;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.Phaser;
 
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-@RunWith(JUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class CrawlerEasyTest {
+public class CrawlerEasyTest extends BaseTest {
     @Rule
     public TestRule watcher = new TestWatcher() {
         protected void starting(final Description description) {
@@ -111,11 +105,8 @@ public class CrawlerEasyTest {
     }
 
     private static Crawler createInstance(final Downloader downloader, final int downloaders, final int extractors, final int perHost) {
-        final String className = System.getProperty("cut");
-        Assert.assertTrue("Class name not specified", className != null);
-
         try {
-            final Constructor<?> constructor = Class.forName(className).getConstructor(Downloader.class, int.class, int.class, int.class);
+            final Constructor<?> constructor = loadClass().getConstructor(Downloader.class, int.class, int.class, int.class);
             return (Crawler) constructor.newInstance(downloader, downloaders, extractors, perHost);
         } catch (final Exception e) {
             throw new AssertionError(e);

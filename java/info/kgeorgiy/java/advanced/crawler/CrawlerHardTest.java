@@ -2,8 +2,6 @@ package info.kgeorgiy.java.advanced.crawler;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.junit.runners.MethodSorters;
 
 import java.io.IOException;
@@ -11,7 +9,6 @@ import java.io.IOException;
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-@RunWith(JUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CrawlerHardTest extends CrawlerEasyTest {
     @Test
