@@ -3,6 +3,21 @@
 
 [Условия домашних заданий](http://www.kgeorgiy.info/courses/java-advanced/homeworks.html)
 
+Домашнее задание 8. HelloUDP
+----
+* Протестировать клиент:
+
+        info.kgeorgiy.java.advanced.hello.Tester client <полное имя класса>
+
+* Протестировать сервер:
+
+        info.kgeorgiy.java.advanced.hello.Tester server <полное имя класса>
+
+Исходный код тестов:
+
+* [Клиента](java/info/kgeorgiy/java/advanced/hello/HelloClientTest.java)
+* [Сервера](java/info/kgeorgiy/java/advanced/hello/HelloServerTest.java)
+
 Домашнее задание 7. Параллельный запуск
 ----
 * Протестировать простую версию задания: 
