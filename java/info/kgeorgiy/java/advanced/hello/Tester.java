@@ -1,8 +1,6 @@
 package info.kgeorgiy.java.advanced.hello;
 
 import info.kgeorgiy.java.advanced.base.BaseTester;
-import info.kgeorgiy.java.advanced.implementor.ClassImplementorTest;
-import info.kgeorgiy.java.advanced.implementor.InterfaceImplementorTest;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
