@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class HelloClientTest extends BaseTest {
-    public static final int PORT = 8888;
+    private static int port = 8888;
     public static final String PREFIX = HelloClientTest.class.getName();
 
     @Test
@@ -54,17 +54,14 @@ public class HelloClientTest extends BaseTest {
     }
 
     private void test(final int requests, final int treads, final double p) throws IOException {
-        try (DatagramSocket socket = new DatagramSocket(PORT)) {
+        final int port = HelloClientTest.port++;
+        try (DatagramSocket socket = new DatagramSocket(port)) {
             final AtomicInteger[] expected = Util.server(PREFIX, treads, p, socket);
             final HelloClient client = createCUT();
-            client.start("localhost", PORT, PREFIX, requests, treads);
+            client.start("localhost", port, PREFIX, requests, treads);
             socket.close();
             for (int i = 0; i < expected.length; i++) {
                 Assert.assertEquals("Invalid number of requests on thread " + i , requests, expected[i].get());
-            }
-            try {
-                Thread.sleep(200);
-            } catch (final InterruptedException ignore) {
             }
         }
     }
