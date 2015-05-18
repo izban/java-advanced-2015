@@ -10,7 +10,24 @@ import java.util.concurrent.*;
 
 
 /**
+ * This class is concurent implementation of {@link info.kgeorgiy.java.advanced.crawler.Crawler} interface.
+ * It can download your site recursively by BFS for needed depth.
+ * <p>
+ * Class can be created with different params: max downloaders threads, extractors thread, and max downloads from each
+ * host at time.
+ * <p>
+ * Work is divided by two parts: downloading sites and parsing links from {@link Document}.
+ * <p>
+ * Class implements {@link AutoCloseable} interface, and it can't be used after it was stopped.
+ * <p>
+ * You need your copy of {@link info.kgeorgiy.java.advanced.crawler.Downloader} to use the class.
+ * {@link info.kgeorgiy.java.advanced.crawler.CachingDownloader} is recommended.
  *
+ * @author izban
+ * @see info.kgeorgiy.java.advanced.crawler.Crawler
+ * @see java.lang.AutoCloseable
+ * @see ExecutorService
+ * @see Downloader
  */
 public class WebCrawler implements Crawler {
     private final Downloader downloader;
@@ -20,11 +37,12 @@ public class WebCrawler implements Crawler {
     private final static String USAGE = "interface: WebCrawler url [downloads [extractors [perHost]]]";
 
     /**
+     * Constructor of class.
      *
-     * @param downloader
-     * @param downloaders
-     * @param extractors
-     * @param perHost
+     * @param downloader object which will download sites.
+     * @param downloaders max downloaders threads count
+     * @param extractors max extractors threads count
+     * @param perHost max downloads from one host
      */
     public WebCrawler(Downloader downloader, int downloaders, int extractors, int perHost) {
         this.downloader = downloader;
@@ -36,10 +54,11 @@ public class WebCrawler implements Crawler {
     }
 
     /**
+     * Downloads site by BFS for depth distance.
      *
-     * @param url
-     * @param depth
-     * @return
+     * @param url site to download
+     * @param depth depth for download
+     * @return Result
      */
     public Result download(String url, int depth) {
 
@@ -140,7 +159,10 @@ public class WebCrawler implements Crawler {
     }
 
     /**
+     * Usage: WebCrawler url [downloads [extractors [perHost]]]
+     * Prints all found link to stdout.
      *
+     * @param args command line args
      */
     public static void main(String[] args) {
         if (args == null || args.length < 1 || args.length > 4) {
@@ -189,7 +211,7 @@ public class WebCrawler implements Crawler {
     }
 
     /**
-     *
+     * Close object. It can't be used anymore after closing!
      */
     @Override
     public void close() {
