@@ -3,20 +3,50 @@
 
 [Условия домашних заданий](http://www.kgeorgiy.info/courses/java-advanced/homeworks.html)
 
+Домашнее задание 9. HelloUDP
+----
+* Протестировать клиент:
+
+        info.kgeorgiy.java.advanced.hello.Tester client <полное имя класса>
+
+* Протестировать сервер:
+
+        info.kgeorgiy.java.advanced.hello.Tester server <полное имя класса>
+
+Исходный код тестов:
+
+* [Клиента](java/info/kgeorgiy/java/advanced/hello/HelloClientTest.java)
+* [Сервера](java/info/kgeorgiy/java/advanced/hello/HelloServerTest.java)
+
+Домашнее задание 8. Web Crawler
+----
+* Протестировать простую версию задания:
+
+        info.kgeorgiy.java.advanced.crawler.Tester easy <полное имя класса>
+
+* Протестировать сложную версию задания:
+
+        info.kgeorgiy.java.advanced.crawler.Tester hard <полное имя класса>
+
+Исходный код тестов:
+
+* [Простой вариант](java/info/kgeorgiy/java/advanced/crawler/CrawlerEasyTest.java)
+* [Сложный вариант](java/info/kgeorgiy/java/advanced/crawler/CrawlerHardTest.java)
+
 Домашнее задание 7. Параллельный запуск
 ----
-* Протестировать сложную версию задания: 
+* Протестировать простую версию задания:
 
         info.kgeorgiy.java.advanced.mapper.Tester taskScalar <ParallelMapperImpl>,<IterativeParallelism>
 
-* Протестировать простую версию задания: 
-    
+* Протестировать сложную версию задания:
+
         info.kgeorgiy.java.advanced.mapper.Tester taskList <ParallelMapperImpl>,<IterativeParallelism>
 
 Внимание! Между полными именами классов `ParallelMapperImpl` и `IterativeParallelism` должна
 быть запятая и не должно быть пробелов.
-   
-Исходный код тестов: 
+
+Исходный код тестов:
 
 * [Простой вариант](java/info/kgeorgiy/java/advanced/concurrent/ScalarTPTest.java)
 * [Сложный вариант](java/info/kgeorgiy/java/advanced/concurrent/ListTPTest.java)
@@ -24,20 +54,20 @@
 
 Домашнее задание 6. Итеративный параллелизм
 ----
-* Протестировать сложную версию задания: 
+* Протестировать сложную версию задания:
 
         info.kgeorgiy.java.advanced.concurrent.Tester list <полное имя класса>
 
-  Класс должен реализовывать интерфейс 
+  Класс должен реализовывать интерфейс
   [ScalarIP](java/info/kgeorgiy/java/advanced/concurrent/ScalarIP.java).
-* Протестировать простую версию задания: 
-    
+* Протестировать простую версию задания:
+
         info.kgeorgiy.java.advanced.concurrent.Tester scalar <полное имя класса>
-   
-  Класс должен реализовывать интерфейс 
+
+  Класс должен реализовывать интерфейс
   [ListIP](java/info/kgeorgiy/java/advanced/concurrent/ListIP.java).
 
-Исходный код тестов: 
+Исходный код тестов:
 
 * [Простой вариант](java/info/kgeorgiy/java/advanced/concurrent/ScalarIPTest.java)
 * [Сложный вариант](java/info/kgeorgiy/java/advanced/concurrent/ListIPTest.java)
@@ -45,36 +75,36 @@
 
 Домашнее задание 3 и 4. Implementor / Jar Implementor
 ----
-* Протестировать сложную версию задания: 
-    
+* Протестировать сложную версию задания:
+
         info.kgeorgiy.java.advanced.implementor.Tester interface <полное имя класса>
 
-  Класс должен реализовывать интерфейс 
-  [JarImpler](java/info/kgeorgiy/java/advanced/implementor/JarImpler.java).
-    
-* Протестировать простую версию задания: 
-    
-        info.kgeorgiy.java.advanced.implementor.Tester class <полное имя класса>
-    
-  Класс должен реализовывать интерфейс 
+  Класс должен реализовывать интерфейс
   [JarImpler](java/info/kgeorgiy/java/advanced/implementor/JarImpler.java).
 
-Исходный код тестов: 
+* Протестировать простую версию задания:
+
+        info.kgeorgiy.java.advanced.implementor.Tester class <полное имя класса>
+
+  Класс должен реализовывать интерфейс
+  [JarImpler](java/info/kgeorgiy/java/advanced/implementor/JarImpler.java).
+
+Исходный код тестов:
 
 * [Простой вариант](java/info/kgeorgiy/java/advanced/implementor/InterfaceImplementorTest.java)
 * [Сложный вариант](java/info/kgeorgiy/java/advanced/implementor/ClassImplementorTest.java)
 
 Домашнее задание 2. ArraySortedSet
 ----
-* Протестировать сложную версию задания: 
+* Протестировать сложную версию задания:
 
         info.kgeorgiy.java.advanced.arrayset.Tester NavigableSet <полное имя класса>
 
-* Протестировать простую версию задания: 
+* Протестировать простую версию задания:
 
         info.kgeorgiy.java.advanced.arrayset.Tester SortedSet <полное имя класса>
 
-Исходный код тестов: 
+Исходный код тестов:
 
 * [Простой вариант](java/info/kgeorgiy/java/advanced/arrayset/SortedSetTest.java)
 * [Сложный вариант](java/info/kgeorgiy/java/advanced/arrayset/NavigableSetTest.java)
@@ -90,14 +120,14 @@
 
         info.kgeorgiy.java.advanced.walk.Tester Walk <полное имя класса>
 
-   для простого варианта, и 
+   для простого варианта, и
 
         info.kgeorgiy.java.advanced.walk.Tester RecursiveWalk <полное имя класса>
 
    для сложного. Обратите внимание, что все скачанные `.jar` файлы должны
    быть указаны в `CLASSPATH`.
-    
-Исходный код тестов: 
+
+Исходный код тестов:
 
 * [Простой вариант](java/info/kgeorgiy/java/advanced/walk/WalkTest.java)
 * [Сложный вариант](java/info/kgeorgiy/java/advanced/walk/RecursiveWalkTest.java)
