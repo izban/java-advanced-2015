@@ -10,9 +10,24 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by izban on 18.05.15.
+ * This class implements {@link HelloClient}. It can send some messages in several threads to host at given port
+ * with current prefix. It expects answer in form "Hello, %message".
+ *
+ * @see info.kgeorgiy.java.advanced.hello.HelloClient
+ * @author izban
  */
 public class HelloUDPClient implements HelloClient {
+
+    /**
+     * This method starts to send threads * requests number of messages spreaded in threads threads.
+     * Messages are sent in UDP-requests, and it is expected to see an answer "Hello, %message".
+     *
+     * @param host host
+     * @param port port
+     * @param prefix prefix of message
+     * @param requests number of requests in each thread
+     * @param threads number of threads to spawn
+     */
     @Override
     public void start(String host, int port, String prefix, int requests, int threads) {
         ExecutorService service = Executors.newFixedThreadPool(threads);

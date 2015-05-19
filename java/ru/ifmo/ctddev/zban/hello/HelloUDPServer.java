@@ -8,13 +8,23 @@ import java.nio.charset.Charset;
 import java.util.concurrent.*;
 
 /**
- * Created by izban on 18.05.15.
+ * This class implements {@link HelloServer}. It can be started at some port, and it will answer at any UDP-request
+ * to this port backward with prefix "Hello, %message".
+ *
+ * @see info.kgeorgiy.java.advanced.hello.HelloServer
+ * @author izban
  */
 public class HelloUDPServer implements HelloServer {
     private final boolean[] running = new boolean[1 << 16];
     private final ConcurrentHashMap<Integer, ExecutorService> workers = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Integer, DatagramSocket> sockets = new ConcurrentHashMap<>();
 
+    /**
+     * Runs given number of threads at given port to answer any incoming UDP-packet.
+     *
+     * @param port port
+     * @param threads threads
+     */
     @Override
     public void start(int port, int threads) {
         synchronized (running) {
@@ -57,9 +67,12 @@ public class HelloUDPServer implements HelloServer {
         } catch (SocketException | UnknownHostException e) {
             e.printStackTrace();
         }
-
     }
 
+
+    /**
+     * Closes server. After closing it can be reused.
+     */
     @Override
     public synchronized void close() {
         for (int i = 0; i < running.length; i++) {
