@@ -17,7 +17,7 @@ public class CopyUtils {
             Files.deleteIfExists(cpath);
             Path path = Files.createFile(cpath);
 
-            final int MAXN = 300_000_000;
+            final int MAXN = 200_000_000;
             byte[] data = new byte[MAXN];
             Random random = new Random();
             random.nextBytes(data);
@@ -30,5 +30,7 @@ public class CopyUtils {
     static public void createFile() {
         create("trash/in/deep/a");
         create("trash/in/deep/b");
+        create("trash/in/deep/c");
+        create("trash/in/deep/d");
     }
 }

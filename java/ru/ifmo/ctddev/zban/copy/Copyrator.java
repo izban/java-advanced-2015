@@ -3,21 +3,21 @@ package ru.ifmo.ctddev.zban.copy;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.function.BiFunction;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by izban on 20.05.15.
  */
 public class Copyrator {
-    static private final int BUF_SIZE = 4096;
+    static private final int BUF_SIZE = 16384;
 
-    private BiFunction<Long, Long, Void> function;
-    private final long[] sizes = {0, 0};
+    public final AtomicLong[] sizes = {new AtomicLong(0), new AtomicLong(0)};
 
-    public boolean running = false;
+    public Thread thread;
+    public AtomicBoolean running = new AtomicBoolean(true);
 
-    public Copyrator(BiFunction<Long, Long, Void> biFunction) {
-        this.function = biFunction;
+    public Copyrator() {
     }
 
     private void copy(Path file, Path from, Path to) {
@@ -37,12 +37,11 @@ public class Copyrator {
             byte[] buffer = new byte[BUF_SIZE];
             int readed;
             while ((readed = reader.read(buffer)) != -1) {
-                if (!running) {
-                    return;
+                if (!running.get()) {
+                    break;
                 }
                 writer.write(buffer, 0, readed);
-                sizes[0] += readed;
-                function.apply(sizes[0], sizes[1]);
+                sizes[0].addAndGet(readed);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,36 +49,43 @@ public class Copyrator {
     }
 
     public void copy(String _from, String _to) {
-        running = true;
-        function.apply(0L, 1L);
-        Path from = Paths.get(_from);
-        Path to = Paths.get(_to);
-        try {
-            Files.walkFileTree(from, new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    if (!running) {
-                        return FileVisitResult.TERMINATE;
+        running.set(true);
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Path from = Paths.get(_from);
+                Path to = Paths.get(_to);
+                try {
+                    Files.walkFileTree(from, new SimpleFileVisitor<Path>() {
+                        @Override
+                        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                            if (!running.get()) {
+                                return FileVisitResult.TERMINATE;
+                            }
+                            sizes[1].addAndGet(Files.size(file));
+                            return FileVisitResult.CONTINUE;
+                        }
+                    });
+                    if (sizes[1].longValue() < 1L) {
+                        sizes[1].set(1L);
                     }
-                    sizes[1] += Files.size(file);
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-            sizes[1] = Math.max(sizes[1], 1L);
 
-            Files.walkFileTree(from, new SimpleFileVisitor<Path>(){
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    if (!running) {
-                        return FileVisitResult.TERMINATE;
-                    }
-                    copy(file, from, to);
-                    return FileVisitResult.CONTINUE;
+                    Files.walkFileTree(from, new SimpleFileVisitor<Path>(){
+                        @Override
+                        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                            if (!running.get()) {
+                                return FileVisitResult.TERMINATE;
+                            }
+                            copy(file, from, to);
+                            return FileVisitResult.CONTINUE;
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        running = false;
+                running.set(false);
+            }
+        });
+        thread.start();
     }
 }

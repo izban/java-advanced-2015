@@ -63,28 +63,10 @@ public class UIFileCopy {
         progressBar.setMaximum(1);
         progressBar.setValue(0);
 
-        Copyrator copyrator = new Copyrator((done, all) -> {
-            progressBar.setValue((int) (done * 1.0 / all * PROGRESSBAR_SIZE));
-            progressBar.setMaximum(PROGRESSBAR_SIZE);
-            label1.setText(String.format(LABEL_COMPLETED_FORMAT, 100L * done / all));
-            long curTime = System.currentTimeMillis();
-            label2.setText(String.format(LABEL_ELAPSED_FORMAT, (curTime - startTime) / 1000));
-            if ((curTime - lastTime[0]) > 100) {
-                double averageSpeed = done / 1000.0 / (curTime - startTime);
-                double currentSpeed = (done - downloaded[0]) / 1000.0 / (curTime - lastTime[0]);
-                label3.setText(String.format(LABEL_AVERAGESPEED_FORMAT, averageSpeed));
-                label4.setText(String.format(LABEL_CURRENTSPEED_FORMAT, currentSpeed));
-                label5.setText(String.format(LABEL_ESTIMATE_FORMAT, (int)((all - done) / 1e6 / averageSpeed)));
-                lastTime[0] = curTime;
-                downloaded[0] = done;
-                panel.updateUI();
-            }
-            return null;
-        });
+        Copyrator copyrator = new Copyrator();
 
         button.addActionListener(e -> {
-            frame.dispose();
-            copyrator.running = false;
+            copyrator.running.set(false);
         });
 
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -112,6 +94,36 @@ public class UIFileCopy {
         frame.setVisible(true);
 
         copyrator.copy(from, to);
+        while (true) {
+            if (!copyrator.running.get()) {
+                break;
+            }
+            long done = copyrator.sizes[0].longValue();
+            long all = Math.max(1, copyrator.sizes[1].longValue());
+
+            progressBar.setValue((int) (done * 1.0 / all * PROGRESSBAR_SIZE));
+            progressBar.setMaximum(PROGRESSBAR_SIZE);
+            label1.setText(String.format(LABEL_COMPLETED_FORMAT, 100L * done / all));
+            long curTime = System.currentTimeMillis();
+            label2.setText(String.format(LABEL_ELAPSED_FORMAT, (curTime - startTime) / 1000));
+            if ((curTime - lastTime[0]) > 300) {
+                double averageSpeed = done / 1000.0 / (curTime - startTime);
+                double currentSpeed = (done - downloaded[0]) / 1000.0 / (curTime - lastTime[0]);
+                label3.setText(String.format(LABEL_AVERAGESPEED_FORMAT, averageSpeed));
+                label4.setText(String.format(LABEL_CURRENTSPEED_FORMAT, currentSpeed));
+                label5.setText(String.format(LABEL_ESTIMATE_FORMAT, (int)((all - done) / 1e6 / averageSpeed)));
+                lastTime[0] = curTime;
+                downloaded[0] = done;
+                panel.updateUI();
+            }
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                break;
+            }
+        }
+
         frame.dispose();
     }
 }
