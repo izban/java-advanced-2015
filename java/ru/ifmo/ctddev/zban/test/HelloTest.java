@@ -13,8 +13,8 @@ public class HelloTest {
 
         HelloUDPClient client = new HelloUDPClient();
         HelloUDPServer server = new HelloUDPServer();
-        server.start(59893, 2);
-        client.start("localhost", 59893, "lol", 2, 2);
+        server.start(5413, 2);
+        client.start("localhost", 5413, "lol", 2, 2);
         server.close();
 
         System.out.println("test 1 is ended");

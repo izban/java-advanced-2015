@@ -1,4 +1,4 @@
-package ru.ifmo.ctddev.zban.bank;
+package examples.rmi;
 
 import java.rmi.*;
 import java.rmi.server.*;
@@ -7,9 +7,9 @@ import java.net.*;
 public class Server {
     private final static int PORT = 8888;
     public static void main(String[] args) {
-        Bank bank = new BankImpl(PORT);
+        Bank bank;
         try {
-            UnicastRemoteObject.exportObject(bank, PORT);
+            bank = new BankImpl(PORT);
             Naming.rebind("rmi://localhost/bank", bank);
         } catch (RemoteException e) {
             System.out.println("Cannot export object: " + e.getMessage());
